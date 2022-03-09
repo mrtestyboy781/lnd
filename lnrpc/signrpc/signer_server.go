@@ -240,6 +240,7 @@ func (r *ServerShell) CreateSubServer(configRegistry lnrpc.SubServerConfigDispat
 // NOTE: The resulting signature should be void of a sighash byte.
 func (s *Server) SignOutputRaw(ctx context.Context, in *SignReq) (*SignResp,
 	error) {
+    log.Infof("===============whole request: %+v", in)
 
 	switch {
 	// If the client doesn't specify a transaction, then there's nothing to
@@ -275,6 +276,7 @@ func (s *Server) SignOutputRaw(ctx context.Context, in *SignReq) (*SignResp,
 	signDescs := make([]*input.SignDescriptor, 0, len(in.SignDescs))
 	for _, signDesc := range in.SignDescs {
 		keyDesc := signDesc.KeyDesc
+        log.Infof("===============keyDesc : %+v", keyDesc)
 
 		// The caller can either specify the key using the raw pubkey,
 		// or the description of the key. We'll still attempt to parse
@@ -294,18 +296,21 @@ func (s *Server) SignOutputRaw(ctx context.Context, in *SignReq) (*SignResp,
 			if err != nil {
 				return nil, err
 			}
+            log.Infof("=============== Using targetPubKey: %+v", targetPubKey)
 		}
 
 		// Similarly, if they specified a key locator, then we'll parse
 		// that as well.
 		if keyDesc.GetKeyLoc() != nil {
 			protoLoc := keyDesc.GetKeyLoc()
+            log.Infof("=============== protoLoc: %+v", protoLoc)
 			keyLoc = keychain.KeyLocator{
 				Family: keychain.KeyFamily(
 					protoLoc.KeyFamily,
 				),
 				Index: uint32(protoLoc.KeyIndex),
 			}
+            log.Infof("=============== Using keyLoc : %+v", keyLoc)
 		}
 
 		// If a witness script isn't passed, then we can't proceed, as

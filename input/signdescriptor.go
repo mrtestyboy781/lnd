@@ -86,11 +86,11 @@ type SignDescriptor struct {
 // yet, since that is usually done just before broadcast by the witness
 // generator.
 func WriteSignDescriptor(w io.Writer, sd *SignDescriptor) error {
-	err := binary.Write(w, binary.BigEndian, sd.KeyDesc.Family)
+	err := binary.Write(w, binary.BigEndian, sd.KeyDesc.KeyLocator.Family)
 	if err != nil {
 		return err
 	}
-	err = binary.Write(w, binary.BigEndian, sd.KeyDesc.Index)
+	err = binary.Write(w, binary.BigEndian, sd.KeyDesc.KeyLocator.Index)
 	if err != nil {
 		return err
 	}
@@ -139,11 +139,11 @@ func WriteSignDescriptor(w io.Writer, sd *SignDescriptor) error {
 // ReadSignDescriptor deserializes a SignDescriptor struct from the passed
 // io.Reader stream.
 func ReadSignDescriptor(r io.Reader, sd *SignDescriptor) error {
-	err := binary.Read(r, binary.BigEndian, &sd.KeyDesc.Family)
+	err := binary.Read(r, binary.BigEndian, &sd.KeyDesc.KeyLocator.Family)
 	if err != nil {
 		return err
 	}
-	err = binary.Read(r, binary.BigEndian, &sd.KeyDesc.Index)
+	err = binary.Read(r, binary.BigEndian, &sd.KeyDesc.KeyLocator.Index)
 	if err != nil {
 		return err
 	}

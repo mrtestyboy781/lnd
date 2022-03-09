@@ -570,6 +570,10 @@ func (r *RPCKeyRing) ComputeInputScript(tx *wire.MsgTx,
 func (r *RPCKeyRing) remoteSign(tx *wire.MsgTx, signDesc *input.SignDescriptor,
 	sigScript []byte) (input.Signature, error) {
 
+
+	log.Infof("===================RPC remote sign: %+v", *signDesc)
+    log.Infof("===================Key Desc: %+v", signDesc.KeyDesc)
+
 	packet, err := packetFromTx(tx)
 	if err != nil {
 		return nil, fmt.Errorf("error converting TX into PSBT: %v", err)
@@ -610,10 +614,10 @@ func (r *RPCKeyRing) remoteSign(tx *wire.MsgTx, signDesc *input.SignDescriptor,
 				keychain.BIP0043Purpose +
 					hdkeychain.HardenedKeyStart,
 				r.coinType + hdkeychain.HardenedKeyStart,
-				uint32(signDesc.KeyDesc.Family) +
+				uint32(signDesc.KeyDesc.KeyLocator.Family) +
 					hdkeychain.HardenedKeyStart,
 				0,
-				signDesc.KeyDesc.Index,
+				signDesc.KeyDesc.KeyLocator.Index,
 			},
 			PubKey: signDesc.KeyDesc.PubKey.SerializeCompressed(),
 		}}

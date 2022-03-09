@@ -138,6 +138,8 @@ func (b *BtcWallet) SignPsbt(packet *psbt.Packet) error {
 		// it's a BIP49/84 key for normal on-chain funds or a key of the
 		// custom purpose 1017 key scope.
 		derivationInfo := in.Bip32Derivation[0]
+        log.Infof("================= derivationInfo %+v", derivationInfo);
+
 		privKey, err := b.deriveKeyByBIP32Path(derivationInfo.Bip32Path)
 		if err != nil {
 			log.Warnf("SignPsbt: Skipping input %d, error "+
@@ -157,7 +159,7 @@ func (b *BtcWallet) SignPsbt(packet *psbt.Packet) error {
 				"derivation info public key %x", idx,
 				privKey.PubKey().SerializeCompressed(),
 				derivationInfo.PubKey)
-			continue
+            continue
 		}
 
 		// Do we need to tweak anything? Single or double tweaks are

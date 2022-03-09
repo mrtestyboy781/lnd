@@ -481,8 +481,8 @@ func (w *WalletKit) DeriveNextKey(ctx context.Context,
 
 	return &signrpc.KeyDescriptor{
 		KeyLoc: &signrpc.KeyLocator{
-			KeyFamily: int32(nextKeyDesc.Family),
-			KeyIndex:  int32(nextKeyDesc.Index),
+			KeyFamily: int32(nextKeyDesc.KeyLocator.Family),
+			KeyIndex:  int32(nextKeyDesc.KeyLocator.Index),
 		},
 		RawKeyBytes: nextKeyDesc.PubKey.SerializeCompressed(),
 	}, nil
